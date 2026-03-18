@@ -1,0 +1,98 @@
+import { useState, useEffect } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import HomeScreen from './components/HomeScreen'
+import GameScreen from './components/GameScreen'
+import Leaderboard from './components/Leaderboard'
+import Lobby from './components/Lobby'
+import { supabase } from './lib/supabase'
+
+function App() {
+  const [screen, setScreen] = useState('home') // 'home', 'lobby', 'game', 'leaderboard'
+  const [playerName, setPlayerName] = useState('')
+  const [playerId, setPlayerId] = useState(null)
+  const [roomCode, setRoomCode] = useState(null)
+  const [isHost, setIsHost] = useState(false)
+  const [hasPlayed, setHasPlayed] = useState(false)
+
+  useEffect(() => {
+    const savedName = localStorage.getItem('swallowsName')
+    const savedPlayed = localStorage.getItem('swallowsHasPlayed') === 'true'
+    if (savedName) setPlayerName(savedName)
+    if (savedPlayed) setHasPlayed(true)
+  }, [])
+
+  const handleStart = async (name, code, isHost) => {
+    setPlayerName(name)
+    setRoomCode(code)
+    setIsHost(isHost)
+    localStorage.setItem('swallowsName', name)
+    
+    // Create online player record linked to room
+    try {
+      const { data, error } = await supabase
+        .from('players')
+        .insert([{ 
+          name, 
+          score: 0, 
+          current_step: 1, 
+          room_code: code,
+          is_host: isHost 
+        }])
+        .select()
+        .single()
+      
+      if (data) setPlayerId(data.id)
+    } catch (err) {
+      console.error('Failed to join room:', err)
+    }
+    
+    setScreen('lobby')
+  }
+
+  const handleFinish = () => {
+    setHasPlayed(true)
+    localStorage.setItem('swallowsHasPlayed', 'true')
+    setScreen('leaderboard')
+  }
+
+  return (
+    <div className="app-container">
+      <AnimatePresence mode="wait">
+        {screen === 'home' && (
+          <HomeScreen 
+            key="home"
+            onStart={handleStart} 
+            onOpenLeaderboard={() => setScreen('leaderboard')} 
+            hasPlayed={hasPlayed}
+          />
+        )}
+        {screen === 'lobby' && (
+          <Lobby
+            key="lobby"
+            roomCode={roomCode}
+            isHost={isHost}
+            onStart={() => setScreen('game')}
+          />
+        )}
+        {screen === 'game' && (
+          <GameScreen 
+            key="game"
+            playerName={playerName} 
+            playerId={playerId}
+            roomCode={roomCode}
+            onFinish={handleFinish} 
+          />
+        )}
+        {screen === 'leaderboard' && (
+          <Leaderboard 
+            key="leaderboard"
+            roomCode={roomCode}
+            onBack={() => setScreen('home')} 
+          />
+        )}
+      </AnimatePresence>
+    </div>
+  )
+}
+
+export default App
