@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Target, Info, Lock } from 'lucide-react'
 
-function Q3({ onResult }) {
+function Q3({ onResult, playerAvatar }) {
   const [userSelections, setUserSelections] = useState([]) // Array of {comp, x} items
   const [phase, setPhase] = useState('placing')
   const [systemBirds, setSystemBirds] = useState([])
@@ -59,11 +59,19 @@ function Q3({ onResult }) {
       className="glass-panel"
       style={{ padding: '40px', maxWidth: '750px', width: '100%', position: 'relative', border: '2px solid rgba(212, 175, 55, 0.2)' }}
     >
+      <div style={{ marginBottom: '30px', textAlign: 'center' }}>
+         <img 
+           src="/assets/Question 3.png" 
+           alt="Question 3 Detail" 
+           style={{ maxWidth: '100%', borderRadius: '16px', boxShadow: '0 10px 30px rgba(0,0,0,0.3)' }} 
+         />
+      </div>
+
       <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '30px' }}>
          <Target size={28} color="#FFD700" />
          <div>
-           <h2 style={{ fontSize: '1.8rem', color: '#FFD700' }}>ผนึกกำลังจอมเวทย์ (Q3)</h2>
-           <p style={{ color: 'var(--text-dim)' }}>ร่ายมนตร์เลือกที่นั่งให้ 4 คนแรกเพื่อให้คนอื่นๆ เข้าสุ่มนั่งได้มากที่สุด</p>
+           <h2 style={{ fontSize: '1.6rem', color: '#FFD700', lineHeight: 1.4 }}>สามารถเลือกที่นั่งให้ 4 คนแรก ได้แต่หลังจากนั้นนักเรียนจะนั่งแบบสุ่มในฝั่งใดฝั่งหนึ่ง</h2>
+           <p style={{ color: 'var(--text-dim)', fontSize: '1.1rem' }}>จัดวางนักเรียนให้สามารถนั่งได้มากที่สุด</p>
          </div>
       </div>
 
@@ -97,19 +105,22 @@ function Q3({ onResult }) {
                      }}
                    >
                      <span style={{ position: 'absolute', bottom: -18, fontSize: '0.7rem', opacity: 0.4 }}>{x}ม.</span>
-                     {(isUser || isSystem) && (
-                       <motion.div 
-                         initial={{ scale: 0, rotate: -45 }}
-                         animate={{ scale: 1, rotate: 0 }}
-                         style={{ 
-                            fontSize: isUser ? '2.5rem' : '1.8rem',
-                            filter: isSystem ? 'grayscale(1) opacity(0.3)' : 'drop-shadow(0 0 10px rgba(255, 215, 0, 0.4))',
-                            zIndex: 10
-                         }} 
-                       >
-                         {isUser ? '🧙‍♂️' : '🧿'}
-                       </motion.div>
-                     )}
+                      {(isUser || isSystem) && (
+                        <motion.div 
+                          initial={{ scale: 0, rotate: -45 }}
+                          animate={{ scale: 1, rotate: 0 }}
+                          style={{ 
+                             width: '80%',
+                             height: '80%',
+                             backgroundImage: `url(/assets/${isUser ? (playerAvatar || 'W1.png') : 'Boky.png'})`,
+                             backgroundSize: 'contain',
+                             backgroundRepeat: 'no-repeat',
+                             backgroundPosition: 'center',
+                             filter: isSystem ? 'grayscale(0.8) opacity(0.4)' : 'drop-shadow(0 5px 10px rgba(0,0,0,0.3))',
+                             zIndex: 10
+                          }} 
+                        />
+                      )}
                    </motion.div>
                  )
                })}
@@ -122,14 +133,27 @@ function Q3({ onResult }) {
         <div style={{ fontSize: '1.1rem', color: '#fff' }}>
           อัญเชิญแล้ว: <strong style={{ color: '#FFD700', fontSize: '1.8rem' }}>{userSelections.length} / 4</strong>
         </div>
-        <button 
-          className="btn-primary" 
-          onClick={handleConfirm}
-          disabled={userSelections.length < 4 || phase !== 'placing'}
-          style={{ minWidth: '220px', height: '60px', fontSize: '1.1rem' }}
-        >
-          {phase === 'placing' ? 'ร่ายมนตร์ยืนยัน' : phase === 'calculating' ? 'กำลังสุ่มวางเพิ่ม...' : 'รอดูผลลัพธ์'}
-        </button>
+          <motion.button 
+            whileHover={{ scale: 1.02, y: -2 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={handleConfirm} 
+            disabled={!isButtonActive}
+            style={{ 
+              height: '80px', 
+              padding: '0 60px', 
+              fontSize: '1.5rem',
+              background: isButtonActive ? 'linear-gradient(135deg, rgba(212, 175, 55, 0.3), rgba(212, 175, 55, 0.1))' : 'rgba(255,255,255,0.05)',
+              border: isButtonActive ? '2px solid rgba(212, 175, 55, 0.6)' : '1px solid rgba(255,255,255,0.1)',
+              borderRadius: '25px',
+              color: isButtonActive ? '#FFD700' : 'rgba(255,255,255,0.2)',
+              fontWeight: 'bold',
+              cursor: isButtonActive ? 'pointer' : 'not-allowed',
+              boxShadow: isButtonActive ? '0 15px 35px rgba(212, 175, 55, 0.2)' : 'none',
+              backdropFilter: 'blur(10px)'
+            }}
+          >
+             {phase === 'placing' ? 'ร่ายมนตร์ยืนยัน' : phase === 'calculating' ? 'กำลังสุ่มวางเพิ่ม...' : 'รอดูผลลัพธ์'}
+          </motion.button>
       </div>
 
       <div style={{ marginTop: '25px', display: 'flex', alignItems: 'center', gap: '8px', color: 'rgba(212, 175, 55, 0.6)', fontSize: '0.9rem', justifyContent: 'center' }}>

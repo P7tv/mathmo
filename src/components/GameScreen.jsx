@@ -19,6 +19,16 @@ function GameScreen({ playerName, playerId, roomCode, onFinish }) {
   const [isFinishingQuestion, setIsFinishingQuestion] = useState(false)
   const [isMovingTrain, setIsMovingTrain] = useState(false)
   const [activeEvent, setActiveEvent] = useState(null) // 'wheel', 'steal'
+  const [avatar, setAvatar] = useState('W1.png')
+
+  useEffect(() => {
+    if (playerId) {
+      supabase.from('players').select('avatar').eq('id', playerId).single()
+        .then(({ data }) => {
+          if (data?.avatar) setAvatar(data.avatar)
+        })
+    }
+  }, [playerId])
 
   // Sync score to Supabase
   useEffect(() => {
@@ -150,22 +160,24 @@ function GameScreen({ playerName, playerId, roomCode, onFinish }) {
              <motion.div 
                 key={`train-container-${currentStep}`}
                 initial={{ x: '-120%' }}
-                animate={{ x: isMovingTrain ? '120%' : 0 }}
-                exit={{ x: '120%' }}
+                animate={{ x: isMovingTrain ? '150%' : 0 }}
+                exit={{ x: '150%' }}
                 transition={{ 
-                  x: { duration: 1, ease: [0.4, 0, 0.2, 1] } 
+                  x: { duration: 1.5, ease: [0.4, 0, 0.2, 1] } 
                 }}
                 style={{
                     position: 'absolute',
-                    width: '100%',
-                    height: '100%',
-                    backgroundImage: `url(/assets/backgrounds/2.png)`,
-                    backgroundSize: 'cover',
+                    width: '1200px', // Wider to fit the full train length
+                    height: '350px',
+                    backgroundImage: `url(/assets/Train.png)`,
+                    backgroundSize: 'contain',
+                    backgroundRepeat: 'no-repeat',
                     backgroundPosition: 'center',
                     zIndex: 1,
                     display: 'flex',
                     alignItems: 'center',
-                    justifyContent: 'center'
+                    justifyContent: 'center',
+                    filter: 'drop-shadow(0 20px 30px rgba(0,0,0,0.5))'
                 }}
             >
                 {/* Question content appears only when train has stopped */}
@@ -174,24 +186,13 @@ function GameScreen({ playerName, playerId, roomCode, onFinish }) {
                     <motion.div 
                         initial={{ opacity: 0, scale: 0.9, y: 20 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
-                        exit={{ opacity: 0, scale: 0.9 }}
-                        transition={{ delay: 1, duration: 0.5 }} // Wait for train to arrive
-                        className="question-overlay"
-                        style={{ 
-                            width: '100%',
-                            height: '100%',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            padding: '40px',
-                            zIndex: 10
-                        }}
+                        exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                        style={{ position: 'relative', zIndex: 10, width: '100%', display: 'flex', justifyContent: 'center' }}
                     >
-                        {currentStep === 1 && <Q1 onResult={handleAnswer} />}
-                        {currentStep === 2 && <Q2 onResult={handleAnswer} />}
-                        {currentStep === 3 && <Q3 onResult={handleAnswer} />}
-                        {currentStep === 4 && <Q4 onResult={handleAnswer} />}
+                        {currentStep === 1 && <Q1 onResult={handleAnswer} playerAvatar={avatar} />}
+                        {currentStep === 2 && <Q2 onResult={handleAnswer} playerAvatar={avatar} />}
+                        {currentStep === 3 && <Q3 onResult={handleAnswer} playerAvatar={avatar} />}
+                        {currentStep === 4 && <Q4 onResult={handleAnswer} playerAvatar={avatar} />}
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -226,6 +227,17 @@ function GameScreen({ playerName, playerId, roomCode, onFinish }) {
                         border: showFeedback === 'correct' ? '2px solid #00FF7F' : '2px solid #FF3B30',
                         boxShadow: showFeedback === 'correct' ? '0 0 50px rgba(0,255,127,0.3)' : '0 0 50px rgba(255,59,48,0.3)'
                     }}>
+                        <div style={{ 
+                            width: '120px', 
+                            height: '120px', 
+                            marginBottom: '20px',
+                            backgroundImage: showFeedback === 'correct' ? `url(/assets/${avatar})` : 'none',
+                            backgroundSize: 'contain',
+                            backgroundRepeat: 'no-repeat',
+                            backgroundPosition: 'center'
+                        }}>
+                            {showFeedback === 'incorrect' && <div style={{ fontSize: '5rem' }}>❌</div>}
+                        </div>
                         <h2 style={{ fontSize: '4rem', color: 'white' }}>
                             {showFeedback === 'correct' ? '✨ ถูกต้อง ✨' : '❌ ลองใหม่อีกครั้ง ❌'}
                         </h2>

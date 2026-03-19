@@ -15,13 +15,13 @@ function HomeScreen({ onStart, onOpenLeaderboard, hasPlayed }) {
     if (!name.trim()) return setError('กรุณาใส่ชื่อของคุณก่อนครับ')
     setIsLoading(true)
     setError('')
-    
+
     try {
       const code = generateRoomCode()
       const { error: roomError } = await supabase
         .from('rooms')
         .insert([{ code, status: 'waiting' }])
-      
+
       if (roomError) throw roomError
 
       onStart(name, code, true)
@@ -44,7 +44,7 @@ function HomeScreen({ onStart, onOpenLeaderboard, hasPlayed }) {
         .select('*')
         .eq('code', joinCode.toUpperCase())
         .single()
-      
+
       if (roomError || !room) {
         setError('ไม่พบห้องที่ระบุ กรุณาตรวจสอบรหัสอีกครั้ง')
       } else if (room.status !== 'waiting') {
@@ -60,7 +60,7 @@ function HomeScreen({ onStart, onOpenLeaderboard, hasPlayed }) {
   }
 
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -73,11 +73,11 @@ function HomeScreen({ onStart, onOpenLeaderboard, hasPlayed }) {
     >
       <div className="glass-panel" style={{ padding: '60px 40px', maxWidth: '450px', width: '100%', textAlign: 'center', position: 'relative', overflow: 'hidden', border: '2px solid rgba(212, 175, 55, 0.2)' }}>
         <div style={{ position: 'absolute', top: '-20%', left: '-20%', width: '200px', height: '200px', background: 'var(--primary-glow)', filter: 'blur(80px)', borderRadius: '50%', zIndex: 0 }} />
-        
+
         <div style={{ position: 'relative', zIndex: 1 }}>
-          <h1 className="title-gradient" style={{ 
-            fontSize: '4rem', 
-            marginBottom: '5px', 
+          <h1 className="title-gradient" style={{
+            fontSize: '4rem',
+            marginBottom: '5px',
             letterSpacing: '-2px',
             background: 'linear-gradient(to bottom, #fff, #FFD700)',
             WebkitBackgroundClip: 'text',
@@ -85,7 +85,7 @@ function HomeScreen({ onStart, onOpenLeaderboard, hasPlayed }) {
             filter: 'drop-shadow(0 0 10px rgba(255, 215, 0, 0.3))'
           }}>Swallows</h1>
           <h2 style={{ fontSize: '1.4rem', color: '#B8860B', marginBottom: '40px', textTransform: 'uppercase', letterSpacing: '6px', fontWeight: '900' }}>บนสายวิเศษ</h2>
-          
+
           <AnimatePresence mode="wait">
             {mode === 'initial' ? (
               <motion.div key="initial" initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -15 }}>
@@ -93,68 +93,88 @@ function HomeScreen({ onStart, onOpenLeaderboard, hasPlayed }) {
                   {hasPlayed ? (
                     <span style={{ color: '#4ADE80', fontWeight: 'bold' }}>ภารกิจเสร็จสิ้น! คุณได้เดินทางมาถึงจุดหมายแล้ว</span>
                   ) : (
-                    <>ขอต้อนรับผู้กล้าเข้าสู่ศึกคำนวณ <br/> <span style={{ color: '#FFD700' }}>"เจ้านกนางแอ่นบนสายอาคม"</span></>
+                    <>ขอต้อนรับผู้กล้าเข้าสู่ศึกคำนวณ <br /> <span style={{ color: '#FFD700' }}>"รถไฟบ็อบ"</span></>
                   )}
                 </p>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                   {!hasPlayed && (
                     <>
-                      <input 
-                        type="text" 
-                        placeholder="นามของคุณจอมเวทย์" 
+                      <input
+                        type="text"
+                        placeholder="นามของคุณจอมเวทย์"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
-                        style={{ 
-                          textAlign: 'center', 
-                          fontSize: '1.2rem', 
-                          padding: '22px', 
+                        style={{
+                          textAlign: 'center',
+                          fontSize: '1.2rem',
+                          padding: '22px',
                           background: 'rgba(0,0,0,0.5)',
-                          border: '1px solid rgba(212, 175, 55, 0.3)'
+                          border: '1px solid rgba(212, 175, 55, 0.3)',
+                          borderRadius: '16px',
+                          color: 'white',
+                          width: '100%',
+                          marginBottom: '20px'
                         }}
                       />
-                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
-                        <button 
+
+                      <div style={{ display: 'flex', gap: '20px', width: '100%' }}>
+                        <motion.button
+                          whileHover={{ scale: 1.02, y: -2 }}
+                          whileTap={{ scale: 0.98 }}
                           onClick={() => setMode('create')}
-                          style={{ 
-                            background: 'rgba(255,255,255,0.05)', 
-                            border: '1px solid rgba(255,255,255,0.1)',
-                            padding: '16px',
-                            borderRadius: '16px',
-                            color: 'white',
+                          style={{
+                            flex: 1,
+                            background: 'linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(212, 175, 55, 0.05))',
+                            border: '1px solid rgba(212, 175, 55, 0.4)',
+                            borderRadius: '20px',
+                            padding: '20px',
+                            color: '#FFD700',
+                            fontSize: '1.2rem',
+                            fontWeight: 'bold',
                             cursor: 'pointer',
+                            height: '75px',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
-                            gap: '8px',
-                            fontWeight: '600'
+                            gap: '12px',
+                            boxShadow: '0 10px 20px rgba(0,0,0,0.2)',
+                            backdropFilter: 'blur(10px)'
                           }}
                         >
-                          <PlusCircle size={20} color="#FFD700" /> สร้างสำนัก
-                        </button>
-                        <button 
+                          <PlusCircle size={22} color="#FFD700" /> สร้างห้อง
+                        </motion.button>
+
+                        <motion.button 
+                          whileHover={{ scale: 1.02, y: -2 }}
+                          whileTap={{ scale: 0.98 }}
                           onClick={() => setMode('join')}
                           style={{ 
-                            background: 'rgba(255,255,255,0.05)', 
-                            border: '1px solid rgba(255,255,255,0.1)',
-                            padding: '16px',
-                            borderRadius: '16px',
-                            color: 'white',
+                            flex: 1, 
+                            background: 'linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(212, 175, 55, 0.05))',
+                            border: '1px solid rgba(212, 175, 55, 0.4)',
+                            borderRadius: '20px',
+                            padding: '20px',
+                            color: '#FFD700',
+                            fontSize: '1.2rem',
+                            fontWeight: 'bold',
                             cursor: 'pointer',
+                            height: '75px',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
-                            gap: '8px',
-                            fontWeight: '600'
+                            gap: '12px',
+                            boxShadow: '0 10px 20px rgba(0,0,0,0.2)',
+                            backdropFilter: 'blur(10px)'
                           }}
                         >
-                          <Users size={20} color="#FFD700" /> เข้าสำนักเพื่อน
-                        </button>
+                          <Users size={22} color="#FFD700" /> เข้าร่วม
+                        </motion.button>
                       </div>
                     </>
                   )}
-                  <button 
-                    onClick={onOpenLeaderboard} 
-                    style={{ 
+                  <button
+                    onClick={onOpenLeaderboard}
+                    style={{
                       background: hasPlayed ? 'var(--primary-glow)' : 'transparent',
                       border: hasPlayed ? '1px solid var(--accent)' : 'none',
                       borderRadius: '16px',
@@ -182,7 +202,7 @@ function HomeScreen({ onStart, onOpenLeaderboard, hasPlayed }) {
                   <button className="btn-primary" onClick={handleCreateRoom} disabled={isLoading} style={{ height: '75px', fontSize: '1.4rem' }}>
                     {isLoading ? <Loader2 className="spin" /> : 'อัญเชิญสำนัก'}
                   </button>
-                  <button 
+                  <button
                     onClick={() => setMode('initial')}
                     style={{ background: 'transparent', border: 'none', color: 'var(--text-dim)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
                   >
@@ -195,17 +215,17 @@ function HomeScreen({ onStart, onOpenLeaderboard, hasPlayed }) {
                 <h3 style={{ marginBottom: '10px', color: '#FFD700' }}>ผนึกรหัสผ่าน</h3>
                 <p style={{ color: 'var(--text-dim)', marginBottom: '30px' }}>ร่ายรหัส 4 หลักเพื่อเข้าสู่สำนักเพื่อน</p>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                  <input 
-                    type="text" 
-                    placeholder="????" 
+                  <input
+                    type="text"
+                    placeholder="????"
                     maxLength={4}
                     value={joinCode}
                     onChange={(e) => setJoinCode(e.target.value.toUpperCase())}
-                    style={{ 
-                      textAlign: 'center', 
-                      fontSize: '3rem', 
-                      padding: '20px', 
-                      letterSpacing: '12px', 
+                    style={{
+                      textAlign: 'center',
+                      fontSize: '3rem',
+                      padding: '20px',
+                      letterSpacing: '12px',
                       fontWeight: '900',
                       color: '#FFD700',
                       background: 'rgba(0,0,0,0.5)',
@@ -215,7 +235,7 @@ function HomeScreen({ onStart, onOpenLeaderboard, hasPlayed }) {
                   <button className="btn-primary" onClick={handleJoinRoom} disabled={isLoading} style={{ height: '75px', fontSize: '1.4rem' }}>
                     {isLoading ? <Loader2 className="spin" /> : 'พุ่งทะยานเข้าสำนัก!'}
                   </button>
-                  <button 
+                  <button
                     onClick={() => setMode('initial')}
                     style={{ background: 'transparent', border: 'none', color: 'var(--text-dim)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
                   >

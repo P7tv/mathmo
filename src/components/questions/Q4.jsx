@@ -34,14 +34,22 @@ function Q4({ onResult }) {
       style={{ padding: '60px', maxWidth: '650px', width: '100%', textAlign: 'center', position: 'relative', border: '2px solid rgba(212, 175, 55, 0.2)' }}
     >
       <div style={{ position: 'relative', zIndex: 1 }}>
+        <div style={{ marginBottom: '30px', textAlign: 'center' }}>
+           <img 
+             src="/assets/Question 4.png" 
+             alt="Question 4 Detail" 
+             style={{ maxWidth: '100%', borderRadius: '16px', boxShadow: '0 10px 30px rgba(0,0,0,0.3)' }} 
+           />
+        </div>
+
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px', marginBottom: '40px' }}>
            <div style={{ padding: '20px', background: 'rgba(0,0,0,0.3)', borderRadius: '24px', border: '1px solid rgba(212, 175, 55, 0.3)' }}>
              <Users size={32} color="#FFD700" />
            </div>
            <div>
-             <h2 style={{ fontSize: '2.2rem', letterSpacing: '-1px', color: '#FFD700' }}>มติเอกฉันท์จอมเวทย์ (Q4)</h2>
+             <h2 style={{ fontSize: '1.8rem', color: '#FFD700', lineHeight: 1.4 }}>นักเรียนทุกคนจะนั่งแบบสุ่มโดยสุ่มทั้ง ฝั่งและตำแหน่ง</h2>
              <p style={{ color: 'rgba(212, 175, 55, 0.6)', fontSize: '1.1rem', marginTop: '10px' }}>
-               {phase === 'voting' ? 'คุณคิดว่าคนส่วนใหญ่จะอัญเชิญจอมเวทย์ได้รวมกี่คน?' : 'กำลังรวบรวมมติจากสรวงสวรรค์...'}
+               คิดว่านักเรียนจะสามารถนั่งได้มากที่สุดกี่คน?
              </p>
            </div>
         </div>

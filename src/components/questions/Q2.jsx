@@ -2,12 +2,12 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Bird, Info } from 'lucide-react'
 
-function Q2({ onResult }) {
+function Q2({ onResult, playerAvatar }) {
   const [answer, setAnswer] = useState('')
   const prePlacedBirds = [
-    { comp: 0, x: 1 },
-    { comp: 0, x: 3 },
-    { comp: 1, x: 2 },
+    { comp: 0, x: 1, avatar: 'M1.png' },
+    { comp: 0, x: 3, avatar: 'M2.png' },
+    { comp: 1, x: 2, avatar: 'W1.png' },
   ]
 
   const handleSubmit = () => {
@@ -25,11 +25,19 @@ function Q2({ onResult }) {
       className="glass-panel"
       style={{ padding: '40px', maxWidth: '700px', width: '100%', position: 'relative', border: '2px solid rgba(212, 175, 55, 0.2)' }}
     >
+      <div style={{ marginBottom: '30px', textAlign: 'center' }}>
+         <img 
+           src="/assets/Question 2.png" 
+           alt="Question 2 Detail" 
+           style={{ maxWidth: '100%', borderRadius: '16px', boxShadow: '0 10px 30px rgba(0,0,0,0.3)' }} 
+         />
+      </div>
+
       <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '30px' }}>
          <Bird size={28} color="#FFD700" />
          <div>
-           <h2 style={{ fontSize: '1.8rem', color: '#FFD700' }}>ความจุวิเศษสูงสุด (Q2)</h2>
-           <p style={{ color: 'var(--text-dim)' }}>สายที่ 1 มีจอมเวทย์นั่งแล้วที่ 1, 3ม. และสายที่ 2 ที่ป้าย 2ม.</p>
+           <h2 style={{ fontSize: '1.6rem', color: '#FFD700', lineHeight: 1.4 }}>ถ้ามีนักเรียนนั่งอยู่แล้วในฝั่งที่ 1 ที่ตำแหน่ง 1,3 เมตร และฝั่งที่ 2 ที่ตำแหน่ง 2 เมตร</h2>
+           <p style={{ color: 'var(--text-dim)', fontSize: '1.1rem' }}>จะเติมเพิ่มได้อีกกี่คน (ตอบเป็นจำนวนรวมทั้งหมด)</p>
          </div>
       </div>
 
@@ -65,15 +73,18 @@ function Q2({ onResult }) {
                 style={{ 
                   position: 'absolute', 
                   left: `${(bird.x / 5) * 100}%`, 
-                  top: '-25px', 
+                  top: '-45px', 
                   transform: 'translateX(-50%)',
-                  fontSize: '2.2rem',
-                  filter: 'drop-shadow(0 0 10px rgba(255, 215, 0, 0.4))',
+                  width: '60px',
+                  height: '60px',
+                  backgroundImage: `url(/assets/${bird.avatar})`,
+                  backgroundSize: 'contain',
+                  backgroundRepeat: 'no-repeat',
+                  backgroundPosition: 'center',
+                  filter: 'drop-shadow(0 5px 15px rgba(0,0,0,0.4))',
                   zIndex: 5
                 }}
-              >
-                🧙‍♂️
-              </motion.div>
+              />
             ))}
           </div>
         ))}
@@ -102,9 +113,26 @@ function Q2({ onResult }) {
             }}
             onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
           />
-          <button className="btn-primary" onClick={handleSubmit} style={{ height: '70px', padding: '0 40px', fontSize: '1.1rem' }}>
-            ยืนยันคำทำนาย
-          </button>
+          <motion.button 
+            whileHover={{ scale: 1.02, y: -2 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={handleSubmit} 
+            style={{ 
+              height: '75px', 
+              padding: '0 50px', 
+              fontSize: '1.3rem',
+              background: 'linear-gradient(135deg, rgba(212, 175, 55, 0.3), rgba(212, 175, 55, 0.1))',
+              border: '1px solid rgba(212, 175, 55, 0.5)',
+              borderRadius: '20px',
+              color: '#FFD700',
+              fontWeight: 'bold',
+              cursor: 'pointer',
+              boxShadow: '0 10px 25px rgba(212, 175, 55, 0.2)',
+              backdropFilter: 'blur(10px)'
+            }}
+          >
+             คัดแยกตัวละคร
+          </motion.button>
         </div>
       </div>
 

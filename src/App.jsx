@@ -79,6 +79,7 @@ function App() {
           <Lobby
             key="lobby"
             roomCode={roomCode}
+            playerId={playerId}
             isHost={isHost}
             onStart={() => setScreen('game')}
           />
