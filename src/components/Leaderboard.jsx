@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 import { ArrowLeft, Trophy, Medal, Clock, Target } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 
-function Leaderboard({ onBack }) {
+function Leaderboard({ onBack, roomCode, currentPlayerId }) {
   const [players, setPlayers] = useState([])
 
   useEffect(() => {
@@ -22,20 +22,23 @@ function Leaderboard({ onBack }) {
     return () => {
       supabase.removeChannel(channel)
     }
-  }, [])
+  }, [roomCode]) // Re-fetch if roomCode changes
 
   const fetchPlayers = async () => {
     let query = supabase
       .from('players')
       .select('*')
       .order('score', { ascending: false })
-      .limit(10)
+      .limit(20)
     
     if (roomCode) {
       query = query.eq('room_code', roomCode)
     }
     
-    const { data } = await query
+    const { data, error } = await query
+    if (error) {
+      console.error('Error fetching leaderboard:', error)
+    }
     if (data) setPlayers(data)
   }
 
@@ -77,15 +80,16 @@ function Leaderboard({ onBack }) {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className="glass-panel" 
+                className={`glass-panel ${player.id === currentPlayerId ? 'current-player' : ''}`} 
                 style={{ 
                   display: 'flex', 
                   justifyContent: 'space-between', 
                   alignItems: 'center', 
                   padding: '20px 24px',
-                  background: index === 0 ? 'rgba(255, 204, 0, 0.15)' : 'var(--glass-surface)',
-                  border: index === 0 ? '2px solid var(--accent)' : '1px solid var(--glass-border)',
-                  transform: index === 0 ? 'scale(1.02)' : 'none'
+                  background: player.id === currentPlayerId ? 'rgba(45, 100, 255, 0.2)' : (index === 0 ? 'rgba(255, 204, 0, 0.15)' : 'var(--glass-surface)'),
+                  border: player.id === currentPlayerId ? '2px solid #3B82F6' : (index === 0 ? '2px solid var(--accent)' : '1px solid var(--glass-border)'),
+                  transform: index === 0 ? 'scale(1.02)' : 'none',
+                  boxShadow: player.id === currentPlayerId ? '0 0 20px rgba(59, 130, 246, 0.3)' : 'none'
                 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
@@ -93,17 +97,19 @@ function Leaderboard({ onBack }) {
                     width: '40px', 
                     height: '40px', 
                     borderRadius: '50%', 
-                    background: index === 0 ? 'var(--accent)' : 'var(--glass-bg)',
+                    background: index === 0 ? 'var(--accent)' : (player.id === currentPlayerId ? '#3B82F6' : 'var(--glass-bg)'),
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                     fontWeight: '800',
-                    color: index === 0 ? '#000' : 'white'
+                    color: (index === 0 || player.id === currentPlayerId) ? '#000' : 'white'
                   }}>
                     {index === 0 ? <Trophy size={20} /> : index + 1}
                   </div>
                   <div>
-                    <div style={{ fontWeight: '700', fontSize: '1.1rem' }}>{player.name}</div>
+                    <div style={{ fontWeight: '700', fontSize: '1.1rem' }}>
+                      {player.name} {player.id === currentPlayerId && <span style={{ fontSize: '0.8rem', color: '#3B82F6' }}>(คุณ)</span>}
+                    </div>
                     <div style={{ fontSize: '0.75rem', opacity: 0.5 }}>
                        {player.is_shielded ? '🛡️ มีโล่ป้องกัน' : `ข้อที่ ${player.current_step}`}
                     </div>

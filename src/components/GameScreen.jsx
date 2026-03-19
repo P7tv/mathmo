@@ -93,21 +93,21 @@ function GameScreen({ playerName, playerId, roomCode, onFinish }) {
   }
 
   const moveToNext = () => {
-    setIsFinishingQuestion(true) // Phase 1: Content fades
+    setIsFinishingQuestion(true) // Phase 1: Question content fades out
     
     setTimeout(() => {
-      setIsMovingTrain(true) // Phase 2: Train slides out
+      setIsMovingTrain(true) // Phase 2: Train slides out of view (to the right)
       
       setTimeout(() => {
         if (currentStep < 4) {
           setCurrentStep(prev => prev + 1)
           setIsFinishingQuestion(false)
-          setIsMovingTrain(false)
+          setIsMovingTrain(false) // Reset train position to off-screen left for next enter
         } else {
           finishGame()
         }
-      }, 800) // Train slide duration
-    }, 500) // Wait for content fade
+      }, 1000) // Train slide out duration
+    }, 500)
   }
 
   const finishGame = async () => {
@@ -119,19 +119,20 @@ function GameScreen({ playerName, playerId, roomCode, onFinish }) {
         .eq('id', playerId)
     }
 
+    // Phase 3: Final Fade to Black
     const overlay = document.createElement('div')
     overlay.className = 'fade-to-black'
     document.body.appendChild(overlay)
     
-    setTimeout(() => overlay.classList.add('active'), 10)
+    setTimeout(() => overlay.classList.add('active'), 100)
 
     setTimeout(() => {
-      onFinish()
+      onFinish(true) // Pass 'completed' flag to App/Home
       setTimeout(() => {
         overlay.classList.remove('active')
         setTimeout(() => document.body.removeChild(overlay), 1500)
       }, 500)
-    }, 1500)
+    }, 2000)
   }
 
   return (
@@ -145,24 +146,15 @@ function GameScreen({ playerName, playerId, roomCode, onFinish }) {
         {/* MAIN GAME AREA */}
         <div style={{ flex: 1, position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         
-        {activeEvent === 'wheel' && (
-          <div style={{ position: 'fixed', inset: 0, zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(10px)' }}>
-            <SpinWheel onResult={handleWheelResult} />
-          </div>
-        )}
-
-        {activeEvent === 'steal' && (
-          <div style={{ position: 'fixed', inset: 0, zIndex: 110, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(15px)' }}>
-            <StealModal stealerId={playerId} roomCode={roomCode} onSteal={handleStealResult} />
-          </div>
-        )}
-
         <AnimatePresence mode="wait">
              <motion.div 
-                key={`train-${currentStep}`}
-                initial={{ x: '-100%' }}
-                animate={{ x: isMovingTrain ? '100%' : 0 }}
-                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                key={`train-container-${currentStep}`}
+                initial={{ x: '-120%' }}
+                animate={{ x: isMovingTrain ? '120%' : 0 }}
+                exit={{ x: '120%' }}
+                transition={{ 
+                  x: { duration: 1, ease: [0.4, 0, 0.2, 1] } 
+                }}
                 style={{
                     position: 'absolute',
                     width: '100%',
@@ -176,13 +168,14 @@ function GameScreen({ playerName, playerId, roomCode, onFinish }) {
                     justifyContent: 'center'
                 }}
             >
+                {/* Question content appears only when train has stopped */}
                 <AnimatePresence>
-                  {!isFinishingQuestion && (
+                  {!isMovingTrain && !isFinishingQuestion && (
                     <motion.div 
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
+                        initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.9 }}
-                        transition={{ delay: 0.6, duration: 0.4 }}
+                        transition={{ delay: 1, duration: 0.5 }} // Wait for train to arrive
                         className="question-overlay"
                         style={{ 
                             width: '100%',

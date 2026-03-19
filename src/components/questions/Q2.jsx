@@ -23,75 +23,93 @@ function Q2({ onResult }) {
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       className="glass-panel"
-      style={{ padding: '40px', maxWidth: '700px', width: '100%', position: 'relative' }}
+      style={{ padding: '40px', maxWidth: '700px', width: '100%', position: 'relative', border: '2px solid rgba(212, 175, 55, 0.2)' }}
     >
       <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '30px' }}>
-         <div style={{ padding: '10px', background: 'var(--glass-bg)', borderRadius: '12px', border: '1px solid var(--glass-border)' }}>
-           <Bird size={24} color="var(--accent)" />
-         </div>
+         <Bird size={28} color="#FFD700" />
          <div>
-           <h2 style={{ fontSize: '1.8rem' }}>ความจุสูงสุดที่คาดหวัง (Q2)</h2>
-           <p style={{ color: 'var(--text-dim)' }}>ฝั่งที่ 1 นั่งแล้วที่ป้าย 1, 3ม. และฝั่งที่ 2 ที่ป้าย 2ม.</p>
+           <h2 style={{ fontSize: '1.8rem', color: '#FFD700' }}>ความจุวิเศษสูงสุด (Q2)</h2>
+           <p style={{ color: 'var(--text-dim)' }}>สายที่ 1 มีจอมเวทย์นั่งแล้วที่ 1, 3ม. และสายที่ 2 ที่ป้าย 2ม.</p>
          </div>
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '40px', marginBottom: '40px' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '50px', marginBottom: '40px', padding: '20px', background: 'rgba(0,0,0,0.3)', borderRadius: '24px' }}>
         {[0, 1].map(comp => (
-          <div key={comp} style={{ position: 'relative', height: '60px', margin: '0 40px' }}>
-            <div style={{ position: 'absolute', top: -25, left: -20, fontSize: '0.8rem', color: 'var(--text-dim)' }}>ตู้ที่ {comp + 1}</div>
-            <div style={{ height: '4px', background: 'var(--glass-border)', position: 'absolute', top: '50%', left: 0, right: 0 }}>
-              {[0, 1, 2, 3, 4, 5].map(tick => (
-                <div key={tick} style={{ position: 'absolute', left: `${(tick/5)*100}%`, height: '10px', width: '2px', background: 'rgba(255,255,255,0.1)', top: -3 }} />
-              ))}
-              
-              {prePlacedBirds.filter(b => b.comp === comp).map((bird, i) => (
-                <div 
-                  key={i}
-                  style={{ 
-                    position: 'absolute', 
-                    left: `${(bird.x / 5) * 100}%`, 
-                    top: '50%', 
-                    transform: 'translate(-50%, -50%)',
-                    width: '32px', 
-                    height: '32px', 
-                    background: 'rgba(255,255,255,0.1)', 
-                    borderRadius: '50%',
-                    border: '1px solid var(--glass-border)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    zIndex: 5,
-                    fontSize: '1.4rem'
-                  }}
-                >
-                  {['🐦', '🐧', '🦉'][i % 3]}
-                </div>
-              ))}
-            </div>
+          <div key={comp} style={{ position: 'relative', height: '10px', margin: '0 40px', background: 'rgba(255,255,255,0.1)', borderRadius: '5px' }}>
+            <div style={{ position: 'absolute', top: -30, left: -20, fontSize: '0.75rem', color: '#FFD700', fontWeight: 'bold' }}>สายอาคมที่ {comp + 1}</div>
+            
+            {[0, 1, 2, 3, 4, 5].map(tick => (
+              <div 
+                key={tick} 
+                style={{ 
+                  position: 'absolute', 
+                  left: `${(tick/5)*100}%`, 
+                  height: '15px', 
+                  width: '2px', 
+                  background: 'rgba(255,255,255,0.2)', 
+                  top: -2.5,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center'
+                }} 
+              >
+                <span style={{ position: 'absolute', bottom: -25, fontSize: '0.65rem', opacity: 0.4 }}>{tick}ม.</span>
+              </div>
+            ))}
+            
+            {prePlacedBirds.filter(b => b.comp === comp).map((bird, i) => (
+              <motion.div 
+                key={i}
+                initial={{ scale: 0, y: -20 }}
+                animate={{ scale: 1, y: 0 }}
+                style={{ 
+                  position: 'absolute', 
+                  left: `${(bird.x / 5) * 100}%`, 
+                  top: '-25px', 
+                  transform: 'translateX(-50%)',
+                  fontSize: '2.2rem',
+                  filter: 'drop-shadow(0 0 10px rgba(255, 215, 0, 0.4))',
+                  zIndex: 5
+                }}
+              >
+                🧙‍♂️
+              </motion.div>
+            ))}
           </div>
         ))}
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-        <p style={{ fontSize: '1.2rem', fontWeight: 'bold', textAlign: 'center' }}>ความจุสูงสุดที่คาดหวังเมื่อทุกคนต้องห่างกัน {">= 1ม."} คือเท่าไร?</p>
+        <p style={{ fontSize: '1.2rem', fontWeight: 'bold', textAlign: 'center', color: '#fff' }}>
+          หากต้องรักษาระยะห่าง ≥ 1ม. จะอัญเชิญจอมเวทย์เพิ่มได้รวมกี่คน?
+        </p>
         
         <div style={{ display: 'flex', gap: '15px' }}>
           <input 
             type="number" 
-            placeholder="กรอกจำนวนคน..." 
+            placeholder="จำนวนรวม..." 
             value={answer}
             onChange={(e) => setAnswer(e.target.value)}
-            style={{ flex: 1, height: '65px', fontSize: '1.4rem', textAlign: 'center', fontWeight: 'bold' }}
+            style={{ 
+              flex: 1, 
+              height: '70px', 
+              fontSize: '1.8rem', 
+              textAlign: 'center', 
+              fontWeight: '900',
+              background: 'rgba(0,0,0,0.5)',
+              border: '2px solid rgba(212, 175, 55, 0.3)',
+              color: '#FFD700'
+            }}
             onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
           />
-          <button className="btn-primary" onClick={handleSubmit} style={{ height: '65px', padding: '0 40px' }}>
-            ยืนยัน
+          <button className="btn-primary" onClick={handleSubmit} style={{ height: '70px', padding: '0 40px', fontSize: '1.1rem' }}>
+            ยืนยันคำทำนาย
           </button>
         </div>
       </div>
 
-      <div style={{ marginTop: '25px', display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-dim)', fontSize: '0.85rem', justifyContent: 'center' }}>
-        <Info size={16} /> เคล็ดลับ: คำนึงถึงระยะห่างอย่างน้อย 1 เมตร ระหว่างแต่ละคนนะ
+      <div style={{ marginTop: '25px', display: 'flex', alignItems: 'center', gap: '8px', color: 'rgba(212, 175, 55, 0.6)', fontSize: '0.9rem', justifyContent: 'center' }}>
+        <Info size={18} /> เคล็ดลับ: นับจอมเวทย์ที่มีอยู่เดิมรวมกับที่จะอัญเชิญมาใหม่ด้วยนะ!
       </div>
     </motion.div>
   )

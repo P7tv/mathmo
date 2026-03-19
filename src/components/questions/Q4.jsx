@@ -12,7 +12,6 @@ function Q4({ onResult }) {
     setSelected(choice)
     setPhase('polling')
     
-    // Simulate real-time polling
     setTimeout(() => {
       const simulatedData = choices.map(c => ({
         choice: c,
@@ -32,23 +31,23 @@ function Q4({ onResult }) {
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       className="glass-panel"
-      style={{ padding: '60px', maxWidth: '650px', width: '100%', textAlign: 'center', position: 'relative' }}
+      style={{ padding: '60px', maxWidth: '650px', width: '100%', textAlign: 'center', position: 'relative', border: '2px solid rgba(212, 175, 55, 0.2)' }}
     >
       <div style={{ position: 'relative', zIndex: 1 }}>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px', marginBottom: '40px' }}>
-           <div style={{ padding: '15px', background: 'var(--glass-bg)', borderRadius: '20px', border: '1px solid var(--glass-border)' }}>
-             <Users size={32} color="var(--primary)" />
+           <div style={{ padding: '20px', background: 'rgba(0,0,0,0.3)', borderRadius: '24px', border: '1px solid rgba(212, 175, 55, 0.3)' }}>
+             <Users size={32} color="#FFD700" />
            </div>
            <div>
-             <h2 style={{ fontSize: '2.2rem', letterSpacing: '-1px' }}>ผลสำรวจความจุรวม</h2>
-             <p style={{ color: 'var(--text-dim)', fontSize: '1.1rem', marginTop: '10px' }}>
-               {phase === 'voting' ? 'คุณคิดว่าคนส่วนใหญ่จะตอบข้อไหน?' : 'คนในห้องกำลังเลือกคำตอบนี้...'}
+             <h2 style={{ fontSize: '2.2rem', letterSpacing: '-1px', color: '#FFD700' }}>มติเอกฉันท์จอมเวทย์ (Q4)</h2>
+             <p style={{ color: 'rgba(212, 175, 55, 0.6)', fontSize: '1.1rem', marginTop: '10px' }}>
+               {phase === 'voting' ? 'คุณคิดว่าคนส่วนใหญ่จะอัญเชิญจอมเวทย์ได้รวมกี่คน?' : 'กำลังรวบรวมมติจากสรวงสวรรค์...'}
              </p>
            </div>
         </div>
         
-        <p style={{ marginBottom: '40px', fontSize: '1.4rem', fontWeight: 'bold' }}>
-          รถไฟขบวนนี้รับคนได้ทั้งหมดกี่คน?
+        <p style={{ marginBottom: '40px', fontSize: '1.4rem', fontWeight: 'bold', color: '#fff' }}>
+          มตินี้สำคัญยิ่ง... รถไฟสายอาคมนี้จะรับคนได้ทั้งหมดกี่คน?
         </p>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
@@ -62,24 +61,23 @@ function Q4({ onResult }) {
                 disabled={phase !== 'voting'}
                 onClick={() => handleSelect(choice)}
                 className="glass-panel"
-                whileHover={phase === 'voting' ? { scale: 1.02, x: 5 } : {}}
+                whileHover={phase === 'voting' ? { scale: 1.02, x: 5, background: 'rgba(212, 175, 55, 0.1)' } : {}}
                 whileTap={phase === 'voting' ? { scale: 0.98 } : {}}
                 style={{ 
                   position: 'relative',
                   width: '100%',
                   padding: '25px',
-                  background: isSelected ? 'rgba(255,165,0,0.1)' : 'var(--glass-surface)',
-                  border: isSelected ? '2px solid var(--accent)' : '1px solid var(--glass-border)',
+                  background: isSelected ? 'rgba(212, 175, 55, 0.15)' : 'rgba(0,0,0,0.3)',
+                  border: isSelected ? '2px solid #FFD700' : '1px solid rgba(255,255,255,0.1)',
                   cursor: phase === 'voting' ? 'pointer' : 'default',
                   textAlign: 'left',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'space-between',
                   overflow: 'hidden',
-                  transition: 'all 0.3s'
+                  borderRadius: '20px'
                 }}
               >
-                {/* Poll Bar Backdrop */}
                 {phase === 'reveal' && (
                   <motion.div 
                     initial={{ width: 0 }}
@@ -89,22 +87,22 @@ function Q4({ onResult }) {
                       left: 0, 
                       top: 0, 
                       bottom: 0, 
-                      background: isSelected ? 'rgba(255,165,0,0.15)' : 'rgba(255,255,255,0.05)',
+                      background: isSelected ? 'rgba(212, 175, 55, 0.15)' : 'rgba(255,255,255,0.05)',
                       zIndex: 0
                     }}
                   />
                 )}
 
                 <div style={{ display: 'flex', alignItems: 'center', gap: '15px', position: 'relative', zIndex: 1 }}>
-                  {isSelected ? <CheckCircle2 size={24} color="var(--accent)" /> : <Circle size={24} color="var(--text-dim)" />}
-                  <span style={{ fontSize: '1.4rem', fontWeight: 'bold' }}>{choice} คน</span>
+                  {isSelected ? <CheckCircle2 size={24} color="#FFD700" /> : <Circle size={24} color="rgba(212, 175, 55, 0.3)" />}
+                  <span style={{ fontSize: '1.4rem', fontWeight: 'bold', color: isSelected ? '#FFD700' : '#fff' }}>{choice} คน</span>
                 </div>
 
                 {phase === 'reveal' && (
                   <motion.span 
                     initial={{ opacity: 0 }} 
                     animate={{ opacity: 1 }}
-                    style={{ fontSize: '1.2rem', fontWeight: '800', position: 'relative', zIndex: 1, color: isSelected ? 'var(--accent)' : 'var(--text-dim)' }}
+                    style={{ fontSize: '1.2rem', fontWeight: '800', position: 'relative', zIndex: 1, color: isSelected ? '#FFD700' : 'rgba(212, 175, 55, 0.6)' }}
                   >
                     {data?.percentage}%
                   </motion.span>

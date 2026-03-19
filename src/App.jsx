@@ -49,10 +49,18 @@ function App() {
     setScreen('lobby')
   }
 
-  const handleFinish = () => {
-    setHasPlayed(true)
-    localStorage.setItem('swallowsHasPlayed', 'true')
+  const handleFinish = (completed = false) => {
+    if (completed) {
+      setHasPlayed(true)
+      localStorage.setItem('swallowsHasPlayed', 'true')
+    }
     setScreen('leaderboard')
+  }
+
+  const handleReset = () => {
+    localStorage.removeItem('swallowsHasPlayed')
+    setHasPlayed(false)
+    setScreen('home')
   }
 
   return (
@@ -64,6 +72,7 @@ function App() {
             onStart={handleStart} 
             onOpenLeaderboard={() => setScreen('leaderboard')} 
             hasPlayed={hasPlayed}
+            onReset={handleReset}
           />
         )}
         {screen === 'lobby' && (
@@ -87,6 +96,7 @@ function App() {
           <Leaderboard 
             key="leaderboard"
             roomCode={roomCode}
+            currentPlayerId={playerId}
             onBack={() => setScreen('home')} 
           />
         )}

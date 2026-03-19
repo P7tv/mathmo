@@ -4,7 +4,7 @@ import { PlusCircle, Users, Play, Trophy, ArrowLeft, Loader2 } from 'lucide-reac
 import { generateRoomCode } from '../utils/roomCode'
 import { supabase } from '../lib/supabase'
 
-function HomeScreen({ onStart, onOpenLeaderboard }) {
+function HomeScreen({ onStart, onOpenLeaderboard, hasPlayed }) {
   const [name, setName] = useState('')
   const [mode, setMode] = useState('initial') // initial, create, join
   const [joinCode, setJoinCode] = useState('')
@@ -90,77 +90,87 @@ function HomeScreen({ onStart, onOpenLeaderboard }) {
             {mode === 'initial' ? (
               <motion.div key="initial" initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -15 }}>
                 <p style={{ marginBottom: '40px', color: 'rgba(255,255,255,0.7)', lineHeight: '1.7', fontSize: '1rem' }}>
-                  ขอต้อนรับผู้กล้าเข้าสู่ศึกคำนวณ <br/>
-                  <span style={{ color: '#FFD700' }}>"เจ้านกนางแอ่นบนสายอาคม"</span>
+                  {hasPlayed ? (
+                    <span style={{ color: '#4ADE80', fontWeight: 'bold' }}>ภารกิจเสร็จสิ้น! คุณได้เดินทางมาถึงจุดหมายแล้ว</span>
+                  ) : (
+                    <>ขอต้อนรับผู้กล้าเข้าสู่ศึกคำนวณ <br/> <span style={{ color: '#FFD700' }}>"เจ้านกนางแอ่นบนสายอาคม"</span></>
+                  )}
                 </p>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                  <input 
-                    type="text" 
-                    placeholder="นามของคุณจอมเวทย์" 
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    style={{ 
-                      textAlign: 'center', 
-                      fontSize: '1.2rem', 
-                      padding: '22px', 
-                      background: 'rgba(0,0,0,0.5)',
-                      border: '1px solid rgba(212, 175, 55, 0.3)'
-                    }}
-                  />
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
-                    <button 
-                      onClick={() => setMode('create')}
-                      style={{ 
-                        background: 'rgba(255,255,255,0.05)', 
-                        border: '1px solid rgba(255,255,255,0.1)',
-                        padding: '16px',
-                        borderRadius: '16px',
-                        color: 'white',
-                        cursor: 'pointer',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        gap: '8px',
-                        fontWeight: '600'
-                      }}
-                    >
-                      <PlusCircle size={20} color="#FFD700" /> สร้างสำนัก
-                    </button>
-                    <button 
-                      onClick={() => setMode('join')}
-                      style={{ 
-                        background: 'rgba(255,255,255,0.05)', 
-                        border: '1px solid rgba(255,255,255,0.1)',
-                        padding: '16px',
-                        borderRadius: '16px',
-                        color: 'white',
-                        cursor: 'pointer',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        gap: '8px',
-                        fontWeight: '600'
-                      }}
-                    >
-                      <Users size={20} color="#FFD700" /> เข้าสำนักเพื่อน
-                    </button>
-                  </div>
+                  {!hasPlayed && (
+                    <>
+                      <input 
+                        type="text" 
+                        placeholder="นามของคุณจอมเวทย์" 
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        style={{ 
+                          textAlign: 'center', 
+                          fontSize: '1.2rem', 
+                          padding: '22px', 
+                          background: 'rgba(0,0,0,0.5)',
+                          border: '1px solid rgba(212, 175, 55, 0.3)'
+                        }}
+                      />
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
+                        <button 
+                          onClick={() => setMode('create')}
+                          style={{ 
+                            background: 'rgba(255,255,255,0.05)', 
+                            border: '1px solid rgba(255,255,255,0.1)',
+                            padding: '16px',
+                            borderRadius: '16px',
+                            color: 'white',
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '8px',
+                            fontWeight: '600'
+                          }}
+                        >
+                          <PlusCircle size={20} color="#FFD700" /> สร้างสำนัก
+                        </button>
+                        <button 
+                          onClick={() => setMode('join')}
+                          style={{ 
+                            background: 'rgba(255,255,255,0.05)', 
+                            border: '1px solid rgba(255,255,255,0.1)',
+                            padding: '16px',
+                            borderRadius: '16px',
+                            color: 'white',
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '8px',
+                            fontWeight: '600'
+                          }}
+                        >
+                          <Users size={20} color="#FFD700" /> เข้าสำนักเพื่อน
+                        </button>
+                      </div>
+                    </>
+                  )}
                   <button 
                     onClick={onOpenLeaderboard} 
                     style={{ 
-                      background: 'transparent',
-                      border: 'none',
-                      color: 'rgba(212, 175, 55, 0.6)',
+                      background: hasPlayed ? 'var(--primary-glow)' : 'transparent',
+                      border: hasPlayed ? '1px solid var(--accent)' : 'none',
+                      borderRadius: '16px',
+                      padding: hasPlayed ? '20px' : '0',
+                      color: hasPlayed ? 'white' : 'rgba(212, 175, 55, 0.6)',
                       cursor: 'pointer',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
                       gap: '8px',
-                      fontSize: '0.9rem',
-                      marginTop: '10px'
+                      fontSize: hasPlayed ? '1.2rem' : '0.9rem',
+                      fontWeight: hasPlayed ? 'bold' : 'normal',
+                      marginTop: hasPlayed ? '0' : '10px'
                     }}
                   >
-                    <Trophy size={18} /> หอคอยเกียรติยศ (Leaderboard)
+                    <Trophy size={hasPlayed ? 24 : 18} /> {hasPlayed ? 'ดูหอคอยเกียรติยศ' : 'หอคอยเกียรติยศ (Leaderboard)'}
                   </button>
                 </div>
               </motion.div>
@@ -231,4 +241,41 @@ function HomeScreen({ onStart, onOpenLeaderboard }) {
   )
 }
 
-export default HomeScreen
+function ResetButton({ onReset }) {
+  return (
+    <motion.button
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 0.4 }}
+      whileHover={{ opacity: 1, scale: 1.05 }}
+      onClick={() => {
+        if (confirm('คุณต้องการล้างข้อมูลเพื่อเริ่มเล่นใหม่ใช่หรือไม่?')) {
+          onReset();
+        }
+      }}
+      style={{
+        position: 'absolute',
+        bottom: '20px',
+        right: '20px',
+        background: 'rgba(255,255,255,0.05)',
+        border: '1px solid rgba(255,255,255,0.1)',
+        borderRadius: '10px',
+        color: 'white',
+        padding: '8px 15px',
+        fontSize: '0.75rem',
+        cursor: 'pointer',
+        zIndex: 1000
+      }}
+    >
+      🔄 ล้างข้อมูลเริ่มใหม่
+    </motion.button>
+  )
+}
+
+export default function HomeScreenWrapper(props) {
+  return (
+    <>
+      <HomeScreen {...props} />
+      {props.hasPlayed && <ResetButton onReset={props.onReset} />}
+    </>
+  )
+}
