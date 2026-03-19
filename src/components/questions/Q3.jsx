@@ -138,13 +138,5 @@ function Q3({ onResult }) {
     </motion.div>
   )
 }
- </div>
-
-      <div style={{ marginTop: '20px', display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-dim)', fontSize: '0.85rem' }}>
-        <Info size={16} /> เคล็ดลับ: เลือกตำแหน่งให้สามารถวางคนได้มากที่สุดเท่าที่จะเป็นไปได้
-      </div>
-    </motion.div>
-  )
-}
 
 export default Q3
