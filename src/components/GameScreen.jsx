@@ -251,6 +251,24 @@ function GameScreen({ playerName, playerId, roomCode, onFinish }) {
                 คะแนน: {score.toLocaleString()}
             </div>
         </div>
+
+        {/* RANDOM EVENTS & WHEEL */}
+        <AnimatePresence>
+          {activeEvent === 'wheel' && (
+            <div style={{ position: 'fixed', inset: 0, zIndex: 2000, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(10px)' }}>
+              <SpinWheel onResult={handleWheelResult} />
+            </div>
+          )}
+          {activeEvent === 'steal' && (
+            <div style={{ position: 'fixed', inset: 0, zIndex: 2100, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(10px)' }}>
+              <StealModal 
+                roomCode={roomCode} 
+                currentPlayerId={playerId} 
+                onSteal={handleStealResult} 
+              />
+            </div>
+          )}
+        </AnimatePresence>
     </div>
   )
 }
