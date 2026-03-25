@@ -146,28 +146,7 @@ function GameScreen({ playerName, playerId, roomCode, onFinish }) {
     setIsMovingTrain(true)
     
     setTimeout(() => {
-      // Phase 2: Fade to black
-      const overlay = document.createElement('div')
-      overlay.style.position = 'fixed'
-      overlay.style.top = '0'
-      overlay.style.left = '0'
-      overlay.style.width = '100vw'
-      overlay.style.height = '100vh'
-      overlay.style.backgroundColor = 'black'
-      overlay.style.zIndex = '9999'
-      overlay.style.opacity = '0'
-      overlay.style.transition = 'opacity 2s ease-in-out'
-      document.body.appendChild(overlay)
-      
-      // Force reflow
-      overlay.offsetHeight
-      overlay.style.opacity = '1'
-      
-      // Phase 3: Redirect to home
-      setTimeout(() => {
-        sessionStorage.setItem('game_completed', 'true')
-        window.location.href = '/'
-      }, 2500)
+      onFinish(true)
     }, 1500)
   }
 
