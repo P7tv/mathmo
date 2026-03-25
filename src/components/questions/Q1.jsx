@@ -146,7 +146,7 @@ function Q1({ onResult, playerAvatar }) {
 
       {/* Answer Section */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-        <p style={{ fontSize: isMobile ? '0.9rem' : '1.1rem', fontWeight: 'bold', textAlign: 'center', color: '#fff' }}>มีวิธีจัดวางทั้งหมดกี่วิธี?</p>
+        <p style={{ fontSize: isMobile ? '0.9rem' : '1.1rem', fontWeight: 'bold', textAlign: 'center', color: '#fff' }}>จะวางจอมเวทย์ได้มากที่สุดกี่คน?</p>
         
         <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
           <input 

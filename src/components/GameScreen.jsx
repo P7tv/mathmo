@@ -150,11 +150,7 @@ function GameScreen({ playerName, playerId, roomCode, onFinish }) {
     }, 1500)
   }
 
-  const [bgImage, setBgImage] = useState('/assets/bg1.png')
-
-  useEffect(() => {
-    setBgImage(`/assets/bg${Math.min(3, currentStep)}.png`)
-  }, [currentStep])
+  const [bgImage] = useState('/assets/bg_quiz.png')
 
   return (
     <div className="game-container" style={{ 

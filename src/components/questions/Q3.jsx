@@ -142,11 +142,11 @@ function Q3({ onResult, playerAvatar }) {
                            style={{ 
                               width: '80%',
                               height: '80%',
-                              backgroundImage: `url('/assets/${isUser ? (playerAvatar || 'W1.png') : 'Boky.png'}')`,
-                              backgroundSize: 'contain',
-                              backgroundRepeat: 'no-repeat',
-                              backgroundPosition: 'center',
-                              filter: isSystem ? 'grayscale(1) opacity(0.3)' : 'drop-shadow(0 5px 10px rgba(0,0,0,0.3))',
+                               backgroundImage: `url('/assets/${isUser ? (playerAvatar || 'W1.png') : 'W1.png'}')`,
+                               backgroundSize: 'contain',
+                               backgroundRepeat: 'no-repeat',
+                               backgroundPosition: 'center',
+                               filter: isSystem ? 'grayscale(0.8) opacity(0.5) brightness(0.6)' : 'drop-shadow(0 5px 10px rgba(0,0,0,0.3))',
                               zIndex: 10
                            }} 
                          />
@@ -161,9 +161,9 @@ function Q3({ onResult, playerAvatar }) {
 
       {/* Control Section */}
       <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(0,0,0,0.3)', padding: isMobile ? '12px' : '15px 25px', borderRadius: '15px', border: '1px solid rgba(255,255,255,0.05)', gap: isMobile ? '10px' : '0' }}>
-        <div style={{ fontSize: isMobile ? '0.85rem' : '1.1rem', color: '#fff' }}>
+        <p style={{ fontSize: isMobile ? '0.9rem' : '1.1rem', fontWeight: 'bold', textAlign: 'center', color: '#fff' }}>
           อัญเชิญ: <strong style={{ color: '#FFD700', fontSize: isMobile ? '1.2rem' : '1.8rem', marginLeft: '5px' }}>{userSelections.length} / 4</strong>
-        </div>
+        </p>
           <motion.button 
             whileHover={{ scale: 1.02, y: -2 }}
             whileTap={{ scale: 0.98 }}

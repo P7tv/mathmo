@@ -120,11 +120,11 @@ function Q2({ onResult, playerAvatar }) {
                             style={{ 
                                flex: 1,
                                width: '100%',
-                               backgroundImage: isFixed ? `url('/assets/Boky.png')` : `url('/assets/${playerAvatar || 'W1.png'}')`,
+                               backgroundImage: isFixed ? `url('/assets/W1.png')` : `url('/assets/${playerAvatar || 'W1.png'}')`,
                                backgroundSize: 'contain',
                                backgroundRepeat: 'no-repeat',
                                backgroundPosition: 'center',
-                               filter: isFixed ? 'grayscale(0.5) opacity(0.8)' : 'drop-shadow(0 3px 5px rgba(0,0,0,0.3))',
+                               filter: isFixed ? 'grayscale(0.8) opacity(0.6) brightness(0.7)' : 'drop-shadow(0 3px 5px rgba(0,0,0,0.3))',
                                zIndex: 10
                             }} 
                           />
