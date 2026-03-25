@@ -17,9 +17,30 @@ function App() {
   useEffect(() => {
     const savedName = localStorage.getItem('swallowsName')
     const savedPlayed = localStorage.getItem('swallowsHasPlayed') === 'true'
+    const savedScreen = localStorage.getItem('swallowsScreen')
+    const savedRoomCode = localStorage.getItem('swallowsRoomCode')
+    const savedPlayerId = localStorage.getItem('swallowsPlayerId')
+    const savedIsHost = localStorage.getItem('swallowsIsHost') === 'true'
+
     if (savedName) setPlayerName(savedName)
     if (savedPlayed) setHasPlayed(true)
+    if (savedScreen && savedRoomCode && savedPlayerId) {
+      setScreen(savedScreen)
+      setRoomCode(savedRoomCode)
+      setPlayerId(savedPlayerId)
+      setIsHost(savedIsHost)
+    }
   }, [])
+
+  // Persist state changes
+  useEffect(() => {
+    if (screen !== 'home' && roomCode && playerId) {
+      localStorage.setItem('swallowsScreen', screen)
+      localStorage.setItem('swallowsRoomCode', roomCode)
+      localStorage.setItem('swallowsPlayerId', playerId)
+      localStorage.setItem('swallowsIsHost', isHost.toString())
+    }
+  }, [screen, roomCode, playerId, isHost])
 
   const handleStart = async (name, code, isHost) => {
     setPlayerName(name)
@@ -41,12 +62,18 @@ function App() {
         .select()
         .single()
       
-      if (data) setPlayerId(data.id)
+      if (data) {
+        setPlayerId(data.id)
+        localStorage.setItem('swallowsPlayerId', data.id)
+      }
     } catch (err) {
       console.error('Failed to join room:', err)
     }
     
     setScreen('lobby')
+    localStorage.setItem('swallowsScreen', 'lobby')
+    localStorage.setItem('swallowsRoomCode', code)
+    localStorage.setItem('swallowsIsHost', isHost.toString())
   }
 
   const handleFinish = (completed = false) => {
@@ -55,11 +82,19 @@ function App() {
       localStorage.setItem('swallowsHasPlayed', 'true')
     }
     setScreen('leaderboard')
+    localStorage.setItem('swallowsScreen', 'leaderboard')
   }
 
   const handleReset = () => {
     localStorage.removeItem('swallowsHasPlayed')
+    localStorage.removeItem('swallowsScreen')
+    localStorage.removeItem('swallowsRoomCode')
+    localStorage.removeItem('swallowsPlayerId')
+    localStorage.removeItem('swallowsIsHost')
     setHasPlayed(false)
+    setRoomCode(null)
+    setPlayerId(null)
+    setIsHost(false)
     setScreen('home')
   }
 

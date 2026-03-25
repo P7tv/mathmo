@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { PlusCircle, Users, Play, Trophy, ArrowLeft, Loader2 } from 'lucide-react'
+import { PlusCircle, Users, Trophy, ArrowLeft, Loader2 } from 'lucide-react'
 import { generateRoomCode } from '../utils/roomCode'
 import { supabase } from '../lib/supabase'
 
@@ -26,7 +26,7 @@ function HomeScreen({ onStart, onOpenLeaderboard, hasPlayed }) {
 
       onStart(name, code, true)
     } catch (err) {
-      setError('ไม่สามารถสร้างห้องได้ กรุณาลองใหม่อีกครั้ง')
+      setError('ไม่สามารถสร้างห้องได้ กรุณาลองใหมีกครั้ง')
     } finally {
       setIsLoading(false)
     }
@@ -66,37 +66,35 @@ function HomeScreen({ onStart, onOpenLeaderboard, hasPlayed }) {
       exit={{ opacity: 0 }}
       className="screen-container home-screen"
       style={{
-        backgroundImage: 'linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.7)), url(/assets/backgrounds/1.png)',
+        backgroundImage: 'linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.8)), url(/assets/bg1.png)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
       }}
     >
-      <div className="glass-panel" style={{ padding: '60px 40px', maxWidth: '450px', width: '100%', textAlign: 'center', position: 'relative', overflow: 'hidden', border: '2px solid rgba(212, 175, 55, 0.2)' }}>
-        <div style={{ position: 'absolute', top: '-20%', left: '-20%', width: '200px', height: '200px', background: 'var(--primary-glow)', filter: 'blur(80px)', borderRadius: '50%', zIndex: 0 }} />
-
+      <div className="glass-panel text-center">
         <div style={{ position: 'relative', zIndex: 1 }}>
           <h1 className="title-gradient" style={{
-            fontSize: '4rem',
-            marginBottom: '5px',
+            fontSize: 'min(5rem, 15vw)',
+            marginBottom: '0.5rem',
             letterSpacing: '-2px',
             background: 'linear-gradient(to bottom, #fff, #FFD700)',
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
-            filter: 'drop-shadow(0 0 10px rgba(255, 215, 0, 0.3))'
+            filter: 'drop-shadow(0 0 20px rgba(255, 215, 0, 0.4))'
           }}>Swallows</h1>
-          <h2 style={{ fontSize: '1.4rem', color: '#B8860B', marginBottom: '40px', textTransform: 'uppercase', letterSpacing: '6px', fontWeight: '900' }}>บนสายวิเศษ</h2>
+          <h2 style={{ fontSize: 'min(1.4rem, 5vw)', color: '#B8860B', marginBottom: '2.5rem', textTransform: 'uppercase', letterSpacing: '6px', fontWeight: '900' }}>บนสายวิเศษ</h2>
 
           <AnimatePresence mode="wait">
             {mode === 'initial' ? (
               <motion.div key="initial" initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -15 }}>
-                <p style={{ marginBottom: '40px', color: 'rgba(255,255,255,0.7)', lineHeight: '1.7', fontSize: '1rem' }}>
+                <p style={{ marginBottom: '2.5rem', color: 'rgba(255,255,255,0.7)', lineHeight: '1.7', fontSize: '1rem' }}>
                   {hasPlayed ? (
                     <span style={{ color: '#4ADE80', fontWeight: 'bold' }}>ภารกิจเสร็จสิ้น! คุณได้เดินทางมาถึงจุดหมายแล้ว</span>
                   ) : (
                     <>ขอต้อนรับผู้กล้าเข้าสู่ศึกคำนวณ <br /> <span style={{ color: '#FFD700' }}>"รถไฟบ็อบ"</span></>
                   )}
                 </p>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                <div className="flex-column" style={{ gap: '1.5rem' }}>
                   {!hasPlayed && (
                     <>
                       <input
@@ -104,107 +102,64 @@ function HomeScreen({ onStart, onOpenLeaderboard, hasPlayed }) {
                         placeholder="นามของคุณจอมเวทย์"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
-                        style={{
-                          textAlign: 'center',
-                          fontSize: '1.2rem',
-                          padding: '22px',
-                          background: 'rgba(0,0,0,0.5)',
-                          border: '1px solid rgba(212, 175, 55, 0.3)',
-                          borderRadius: '16px',
-                          color: 'white',
-                          width: '100%',
-                          marginBottom: '20px'
-                        }}
+                        className="text-center"
+                        style={{ fontSize: '1.2rem', padding: '1.25rem' }}
                       />
 
-                      <div style={{ display: 'flex', gap: '20px', width: '100%' }}>
+                      <div style={{ display: 'flex', gap: '1rem', width: '100%' }}>
                         <motion.button
                           whileHover={{ scale: 1.02, y: -2 }}
                           whileTap={{ scale: 0.98 }}
                           onClick={() => setMode('create')}
-                          style={{
-                            flex: 1,
-                            background: 'linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(212, 175, 55, 0.05))',
-                            border: '1px solid rgba(212, 175, 55, 0.4)',
-                            borderRadius: '20px',
-                            padding: '20px',
-                            color: '#FFD700',
-                            fontSize: '1.2rem',
-                            fontWeight: 'bold',
-                            cursor: 'pointer',
-                            height: '75px',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            gap: '12px',
-                            boxShadow: '0 10px 20px rgba(0,0,0,0.2)',
-                            backdropFilter: 'blur(10px)'
-                          }}
+                          className="btn-outline w-full"
+                          style={{'--glass-border': 'rgba(212, 175, 55, 0.4)', color: '#FFD700', height: '60px'}}
                         >
-                          <PlusCircle size={22} color="#FFD700" /> สร้างห้อง
+                          <PlusCircle size={20} /> สร้างห้อง
                         </motion.button>
 
                         <motion.button 
                           whileHover={{ scale: 1.02, y: -2 }}
                           whileTap={{ scale: 0.98 }}
                           onClick={() => setMode('join')}
-                          style={{ 
-                            flex: 1, 
-                            background: 'linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(212, 175, 55, 0.05))',
-                            border: '1px solid rgba(212, 175, 55, 0.4)',
-                            borderRadius: '20px',
-                            padding: '20px',
-                            color: '#FFD700',
-                            fontSize: '1.2rem',
-                            fontWeight: 'bold',
-                            cursor: 'pointer',
-                            height: '75px',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            gap: '12px',
-                            boxShadow: '0 10px 20px rgba(0,0,0,0.2)',
-                            backdropFilter: 'blur(10px)'
-                          }}
+                          className="btn-outline w-full"
+                          style={{'--glass-border': 'rgba(212, 175, 55, 0.4)', color: '#FFD700', height: '60px'}}
                         >
-                          <Users size={22} color="#FFD700" /> เข้าร่วม
+                          <Users size={20} /> เข้าร่วม
                         </motion.button>
                       </div>
                     </>
                   )}
                   <button
                     onClick={onOpenLeaderboard}
-                    style={{
-                      background: hasPlayed ? 'var(--primary-glow)' : 'transparent',
-                      border: hasPlayed ? '1px solid var(--accent)' : 'none',
-                      borderRadius: '16px',
-                      padding: hasPlayed ? '20px' : '0',
-                      color: hasPlayed ? 'white' : 'rgba(212, 175, 55, 0.6)',
+                    className={hasPlayed ? "btn-primary" : ""}
+                    style={!hasPlayed ? {
+                      background: 'transparent',
+                      border: 'none',
+                      color: 'rgba(212, 175, 55, 0.6)',
                       cursor: 'pointer',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      gap: '8px',
-                      fontSize: hasPlayed ? '1.2rem' : '0.9rem',
-                      fontWeight: hasPlayed ? 'bold' : 'normal',
-                      marginTop: hasPlayed ? '0' : '10px'
-                    }}
+                      gap: '0.5rem',
+                      fontSize: '0.9rem',
+                    } : {}}
                   >
-                    <Trophy size={hasPlayed ? 24 : 18} /> {hasPlayed ? 'ดูหอคอยเกียรติยศ' : 'หอคอยเกียรติยศ (Leaderboard)'}
+                    <Trophy size={hasPlayed ? 22 : 18} /> {hasPlayed ? 'ดูหอคอยเกียรติยศ' : 'หอคอยเกียรติยศ'}
                   </button>
                 </div>
               </motion.div>
             ) : mode === 'create' ? (
               <motion.div key="create" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-                <h3 style={{ marginBottom: '10px', color: '#FFD700' }}>เตรียมเปิดสำนักใหม่</h3>
-                <p style={{ color: 'var(--text-dim)', marginBottom: '30px' }}>คุณจะได้รับหน้าที่เป็น "เจ้าสำนัก" ในครั้งนี้</p>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                  <button className="btn-primary" onClick={handleCreateRoom} disabled={isLoading} style={{ height: '75px', fontSize: '1.4rem' }}>
+                <h3 className="mb-4" style={{ color: '#FFD700' }}>เตรียมเปิดสำนักใหม่</h3>
+                <p style={{ color: 'var(--text-dim)', marginBottom: '2rem' }}>คุณจะได้รับหน้าที่เป็น "เจ้าสำนัก"</p>
+                <div className="flex-column" style={{ gap: '1rem' }}>
+                  <button className="btn-primary" onClick={handleCreateRoom} disabled={isLoading} style={{ height: '70px', fontSize: '1.25rem' }}>
                     {isLoading ? <Loader2 className="spin" /> : 'อัญเชิญสำนัก'}
                   </button>
                   <button
                     onClick={() => setMode('initial')}
-                    style={{ background: 'transparent', border: 'none', color: 'var(--text-dim)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
+                    className="btn-outline"
+                    style={{ border: 'none', color: 'var(--text-dim)' }}
                   >
                     <ArrowLeft size={18} /> ย้อนกลับ
                   </button>
@@ -212,32 +167,30 @@ function HomeScreen({ onStart, onOpenLeaderboard, hasPlayed }) {
               </motion.div>
             ) : (
               <motion.div key="join" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }}>
-                <h3 style={{ marginBottom: '10px', color: '#FFD700' }}>ผนึกรหัสผ่าน</h3>
-                <p style={{ color: 'var(--text-dim)', marginBottom: '30px' }}>ร่ายรหัส 4 หลักเพื่อเข้าสู่สำนักเพื่อน</p>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                <h3 className="mb-4" style={{ color: '#FFD700' }}>ผนึกรหัสผ่าน</h3>
+                <p style={{ color: 'var(--text-dim)', marginBottom: '2rem' }}>ร่ายรหัส 4 หลักเพื่อเข้าสู่สำนัก</p>
+                <div className="flex-column" style={{ gap: '1.5rem' }}>
                   <input
                     type="text"
                     placeholder="????"
                     maxLength={4}
                     value={joinCode}
                     onChange={(e) => setJoinCode(e.target.value.toUpperCase())}
+                    className="text-center"
                     style={{
-                      textAlign: 'center',
-                      fontSize: '3rem',
-                      padding: '20px',
-                      letterSpacing: '12px',
+                      fontSize: 'min(3rem, 12vw)',
+                      letterSpacing: '0.5rem',
                       fontWeight: '900',
                       color: '#FFD700',
-                      background: 'rgba(0,0,0,0.5)',
-                      border: '1px solid rgba(212, 175, 55, 0.4)'
                     }}
                   />
-                  <button className="btn-primary" onClick={handleJoinRoom} disabled={isLoading} style={{ height: '75px', fontSize: '1.4rem' }}>
+                  <button className="btn-primary" onClick={handleJoinRoom} disabled={isLoading} style={{ height: '70px', fontSize: '1.25rem' }}>
                     {isLoading ? <Loader2 className="spin" /> : 'พุ่งทะยานเข้าสำนัก!'}
                   </button>
                   <button
                     onClick={() => setMode('initial')}
-                    style={{ background: 'transparent', border: 'none', color: 'var(--text-dim)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
+                    className="btn-outline"
+                    style={{ border: 'none', color: 'var(--text-dim)' }}
                   >
                     <ArrowLeft size={18} /> ย้อนกลับ
                   </button>
@@ -247,14 +200,14 @@ function HomeScreen({ onStart, onOpenLeaderboard, hasPlayed }) {
           </AnimatePresence>
 
           {error && (
-            <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ color: '#EF4444', fontSize: '0.9rem', marginTop: '20px' }}>
+            <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ color: '#EF4444', fontSize: '0.9rem', marginTop: '1.5rem' }}>
               ⚠️ {error}
             </motion.p>
           )}
         </div>
       </div>
 
-      <div style={{ position: 'absolute', bottom: '40px', fontSize: '0.8rem', color: 'var(--text-dim)', opacity: 0.5, letterSpacing: '2px' }}>
+      <div style={{ position: 'absolute', bottom: '2rem', fontSize: '0.75rem', color: 'var(--text-dim)', opacity: 0.5, letterSpacing: '2px' }}>
         MATHMO • รุ่นในห้องเรียนออนไลน์
       </div>
     </motion.div>
@@ -274,19 +227,19 @@ function ResetButton({ onReset }) {
       }}
       style={{
         position: 'absolute',
-        bottom: '20px',
-        right: '20px',
+        bottom: '1rem',
+        right: '1rem',
         background: 'rgba(255,255,255,0.05)',
         border: '1px solid rgba(255,255,255,0.1)',
         borderRadius: '10px',
         color: 'white',
-        padding: '8px 15px',
-        fontSize: '0.75rem',
+        padding: '0.5rem 1rem',
+        fontSize: '0.7rem',
         cursor: 'pointer',
         zIndex: 1000
       }}
     >
-      🔄 ล้างข้อมูลเริ่มใหม่
+      🔄 ล้างข้อมูล
     </motion.button>
   )
 }

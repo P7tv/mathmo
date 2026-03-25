@@ -36,11 +36,12 @@ function MiniLeaderboard({ roomCode, currentPlayerId }) {
     <div 
       className="glass-panel" 
       style={{ 
-        width: '240px', 
-        padding: '20px', 
+        width: '100%',
+        maxWidth: '240px', 
+        padding: '0.75rem', 
         display: 'flex', 
         flexDirection: 'column', 
-        gap: '15px',
+        gap: '0.75rem',
         background: 'rgba(0,0,0,0.4)',
         border: '1px solid rgba(255,255,255,0.05)'
       }}

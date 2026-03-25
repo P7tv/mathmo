@@ -30,9 +30,6 @@ function SpinWheel({ onResult }) {
     
     setTimeout(() => {
       setIsSpinning(false)
-      // Calculate which segment it landed on
-      // The point at top (270 deg usually) or 0 deg depending on pointer position
-      // Pointer is at the top (center top)
       const actualAngle = (360 - (newRotation % 360)) % 360
       const segmentSize = 360 / SEGMENTS.length
       const index = Math.floor(actualAngle / segmentSize)
@@ -50,41 +47,40 @@ function SpinWheel({ onResult }) {
       initial={{ opacity: 0, scale: 0.8 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.8 }}
-      className="glass-panel"
+      className="glass-panel text-center"
       style={{
-        padding: '40px',
+        padding: '2rem',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        gap: '30px',
+        gap: '2rem',
         zIndex: 1000,
-        background: 'rgba(0,0,0,0.85)',
-        backdropFilter: 'blur(20px)',
+        background: 'rgba(0,0,0,0.9)',
         border: '1px solid var(--accent)',
-        boxShadow: '0 0 50px rgba(255,107,157,0.3)'
+        boxShadow: '0 0 50px rgba(255,215,0,0.2)',
+        maxWidth: '450px'
       }}
     >
-      <h2 style={{ fontSize: '2rem', textAlign: 'center' }}>🎡 หมุนวงล้อลุ้นโชค!</h2>
+      <h2 style={{ fontSize: 'min(1.8rem, 6vw)' }}>🎡 วงล้อลุ้นโชค!</h2>
       
-      <div style={{ position: 'relative', width: '320px', height: '320px' }}>
+      <div style={{ position: 'relative', width: 'min(300px, 70vw)', height: 'min(300px, 70vw)' }}>
         {/* Pointer */}
         <div style={{
           position: 'absolute',
-          top: '-15px',
+          top: '-10px',
           left: '50%',
           transform: 'translateX(-50%)',
-          width: '30px',
-          height: '40px',
+          width: '24px',
+          height: '32px',
           background: 'var(--accent)',
           clipPath: 'polygon(50% 100%, 0% 0%, 100% 0%)',
           zIndex: 20,
-          boxShadow: '0 5px 15px rgba(0,0,0,0.3)'
         }} />
         
         {/* Wheel Container */}
         <motion.div
           animate={{ rotate: rotation }}
-          transition={{ duration: 4, ease: [0.12, 0, 0.39, 0] }} // Custom cubic bezier for "premium" deceleration
+          transition={{ duration: 4, ease: [0.12, 0, 0.39, 0] }}
           style={{
             width: '100%',
             height: '100%',
@@ -126,16 +122,16 @@ function SpinWheel({ onResult }) {
                    height: '100%',
                    display: 'flex',
                    justifyContent: 'center',
-                   top: '15px',
+                   top: '10px',
                    transform: `rotate(${i * angle + angle / 2}deg)`,
                    fontWeight: 'bold',
-                   fontSize: '0.9rem',
+                   fontSize: '0.75rem',
                    color: 'white',
                    textShadow: '0 2px 4px rgba(0,0,0,0.5)'
                  }}
                >
-                 <div style={{ transform: 'rotate(0deg)', textAlign: 'center' }}>
-                   {seg.label}
+                 <div style={{ textAlign: 'center' }}>
+                    {seg.label}
                  </div>
                </div>
              )
@@ -146,8 +142,8 @@ function SpinWheel({ onResult }) {
             top: '50%',
             left: '50%',
             transform: 'translate(-50%, -50%)',
-            width: '60px',
-            height: '60px',
+            width: '15%',
+            height: '15%',
             background: 'white',
             borderRadius: '50%',
             zIndex: 10,
@@ -155,9 +151,8 @@ function SpinWheel({ onResult }) {
             alignItems: 'center',
             justifyContent: 'center',
             color: '#000',
-            boxShadow: '0 0 20px rgba(0,0,0,0.5)'
           }}>
-            <Zap fill="currentColor" />
+            <Zap size="60%" fill="currentColor" />
           </div>
         </motion.div>
       </div>
@@ -166,7 +161,7 @@ function SpinWheel({ onResult }) {
         className="btn-primary" 
         onClick={spin}
         disabled={isSpinning || finalResult}
-        style={{ width: '200px', height: '60px', fontSize: '1.2rem' }}
+        style={{ maxWidth: '200px' }}
       >
         {isSpinning ? 'กำลังหมุน...' : finalResult ? 'ยินดีด้วย!' : 'กดเพื่อหมุน!'}
       </button>
@@ -174,15 +169,10 @@ function SpinWheel({ onResult }) {
       <AnimatePresence>
         {finalResult && (
           <motion.div
-            initial={{ y: 50, opacity: 0 }}
+            initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             style={{ 
-              position: 'absolute',
-              bottom: '20px',
-              left: '0',
-              right: '0',
-              textAlign: 'center',
-              fontSize: '1.5rem',
+              fontSize: '1.25rem',
               fontWeight: 'bold',
               color: finalResult.color 
             }}

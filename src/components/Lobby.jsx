@@ -99,64 +99,52 @@ function Lobby({ roomCode, playerId, isHost, onStart }) {
       className="screen-container"
       style={{
         background: 'linear-gradient(135deg, #1e1b4b 0%, #0f172a 100%)',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: '40px',
-        padding: '20px'
       }}
     >
-      <div className="glass-panel" style={{ padding: '50px', maxWidth: '550px', width: '100%', textAlign: 'center', border: '2px solid rgba(212, 175, 55, 0.2)' }}>
-        <h2 style={{ color: 'rgba(212, 175, 55, 0.6)', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '4px', marginBottom: '15px', fontWeight: '800' }}>
+      <div className="glass-panel text-center mb-4" style={{ padding: '2rem' }}>
+        <h2 style={{ color: 'rgba(212, 175, 55, 0.6)', fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '4px', marginBottom: '1rem', fontWeight: '800' }}>
           — อาณาจักรแห่งตัวเลข —
         </h2>
         <div
           onClick={copyCode}
           style={{
-            fontSize: '5rem',
+            fontSize: 'min(5rem, 15vw)',
             fontWeight: '900',
             background: 'linear-gradient(to bottom, #FFD700, #B8860B)',
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
-            letterSpacing: '12px',
+            letterSpacing: '0.5rem',
             cursor: 'pointer',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            gap: '15px'
+            gap: '1rem'
           }}
         >
           {roomCode}
           <motion.div whileHover={{ scale: 1.2 }}>
-            {copied ? <Check size={32} color="#4ADE80" /> : <Copy size={32} style={{ opacity: 0.3 }} />}
+            {copied ? <Check size={24} color="#4ADE80" /> : <Copy size={24} style={{ opacity: 0.3 }} />}
           </motion.div>
         </div>
-        <p style={{ color: 'var(--text-dim)', marginTop: '20px', fontSize: '1.1rem' }}>แชร์รหัสลับให้เหล่าจอมเวทย์เพื่อเข้าร่วมศึก!</p>
+        <p style={{ color: 'var(--text-dim)', marginTop: '1rem', fontSize: '1rem' }}>แชร์รหัสลับเพื่อเข้าสู่ศึก!</p>
       </div>
 
-      <div className="glass-panel" style={{ padding: '30px', maxWidth: '550px', width: '100%' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '25px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <Users size={24} color="#FFD700" />
-            <h3 style={{ margin: 0, fontSize: '1.4rem' }}>ผู้เข้าร่วมทดสอบ ({players.length})</h3>
+      <div className="glass-panel" style={{ padding: '1.5rem', maxWidth: '550px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <Users size={20} color="#FFD700" />
+            <h3 style={{ margin: 0, fontSize: '1.2rem' }}>ผู้เข้าร่วม ({players.length})</h3>
           </div>
           {isHost && (
             <button
               onClick={spawnBots}
+              className="btn-outline"
               style={{
-                fontSize: '0.8rem',
-                padding: '8px 16px',
-                background: 'rgba(212, 175, 55, 0.1)',
-                border: '1px solid rgba(212, 175, 55, 0.3)',
-                borderRadius: '25px',
+                fontSize: '0.75rem',
+                padding: '0.5rem 1rem',
                 color: '#FFD700',
-                cursor: 'pointer',
-                fontWeight: 'bold',
-                transition: 'all 0.3s'
+                borderRadius: '2rem',
               }}
-              onMouseOver={(e) => e.target.style.background = 'rgba(212, 175, 55, 0.2)'}
-              onMouseOut={(e) => e.target.style.background = 'rgba(212, 175, 55, 0.1)'}
             >
               🪄 อัญเชิญบอท
             </button>
@@ -164,9 +152,9 @@ function Lobby({ roomCode, playerId, isHost, onStart }) {
         </div>
 
         {/* CHARACTER SELECTION */}
-        <div style={{ marginBottom: '30px', padding: '20px', background: 'rgba(0,0,0,0.2)', borderRadius: '20px', border: '1px solid rgba(255,255,255,0.05)' }}>
-          <p style={{ fontSize: '0.9rem', color: '#FFD700', marginBottom: '15px', fontWeight: 'bold', textAlign: 'center' }}>เลือกจอมเวทย์ประจำตัวคุณ</p>
-          <div style={{ display: 'flex', gap: '15px', justifyContent: 'center', flexWrap: 'wrap' }}>
+        <div className="mb-4" style={{ padding: '1rem', background: 'rgba(0,0,0,0.2)', borderRadius: '1rem', border: '1px solid rgba(255,255,255,0.05)' }}>
+          <p style={{ fontSize: '0.8rem', color: '#FFD700', marginBottom: '1rem', fontWeight: 'bold', textAlign: 'center' }}>เลือกจอมเวทย์ประจำตัวคุณ</p>
+          <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'center', flexWrap: 'wrap' }}>
             {['W1.png', 'W2.png', 'M1.png', 'M2.png', 'M3.png'].map(avatar => {
               const player = players.find(p => p.id === playerId)
               const isSelected = player?.avatar === avatar
@@ -185,18 +173,16 @@ function Lobby({ roomCode, playerId, isHost, onStart }) {
                     }
                   }}
                   style={{
-                    width: '70px',
-                    height: '70px',
+                    width: '60px',
+                    height: '60px',
                     backgroundImage: `url('/assets/${avatar}')`,
                     backgroundSize: 'contain',
                     backgroundRepeat: 'no-repeat',
                     backgroundPosition: 'center',
                     cursor: 'pointer',
-                    borderRadius: '15px',
+                    borderRadius: '0.75rem',
                     border: isSelected ? '3px solid #FFD700' : '2px solid rgba(255,255,255,0.1)',
                     backgroundColor: isSelected ? 'rgba(212, 175, 55, 0.2)' : 'rgba(255,255,255,0.05)',
-                    boxShadow: isSelected ? '0 0 20px rgba(212, 175, 55, 0.4)' : 'none',
-                    transition: 'all 0.3s'
                   }}
                 />
               )
@@ -204,45 +190,44 @@ function Lobby({ roomCode, playerId, isHost, onStart }) {
           </div>
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+        <div className="flex-column" style={{ gap: '0.75rem', maxHeight: '30vh', overflowY: 'auto', paddingRight: '0.5rem' }}>
           {players.map((p, i) => (
             <motion.div
               key={p.id}
-              initial={{ x: -30, opacity: 0 }}
+              initial={{ x: -20, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
-              transition={{ delay: i * 0.1 }}
+              transition={{ delay: i * 0.05 }}
               style={{
-                padding: '15px 25px',
+                padding: '0.75rem 1rem',
                 background: 'rgba(255,255,255,0.03)',
-                borderRadius: '16px',
+                borderRadius: '1rem',
                 border: '1px solid rgba(255,255,255,0.05)',
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center'
               }}
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                 <div style={{ 
-                  width: '40px', 
-                  height: '40px', 
+                  width: '32px', 
+                  height: '32px', 
                   backgroundImage: `url('/assets/${p.avatar || 'W1.png'}')`, 
                   backgroundSize: 'contain', 
                   backgroundRepeat: 'no-repeat', 
                   backgroundPosition: 'center' 
                 }} />
-                <span style={{ fontSize: '1.1rem', fontWeight: '500' }}>
+                <span style={{ fontSize: '1rem', fontWeight: '500' }}>
                   {p.name} {p.is_host && <span style={{ color: '#FFD700' }}>👑</span>}
                 </span>
               </div>
               {p.is_host && (
                 <span style={{
-                  fontSize: '0.7rem',
-                  padding: '4px 10px',
+                  fontSize: '0.65rem',
+                  padding: '2px 8px',
                   background: 'rgba(212, 175, 55, 0.2)',
                   color: '#FFD700',
-                  borderRadius: '10px',
+                  borderRadius: '0.5rem',
                   fontWeight: 'bold',
-                  textTransform: 'uppercase'
                 }}>
                   เจ้าสำนัก
                 </span>
@@ -252,39 +237,26 @@ function Lobby({ roomCode, playerId, isHost, onStart }) {
         </div>
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '25px' }}>
+      <div className="mt-4 w-full flex-column items-center">
         {isHost ? (
           <motion.button 
             whileHover={{ scale: 1.02, y: -2 }}
             whileTap={{ scale: 0.98 }}
             onClick={handleStartGame}
             disabled={players.length < 1}
+            className="btn-primary"
             style={{ 
-              width: '100%',
               maxWidth: '350px',
-              height: '70px', 
-              background: 'linear-gradient(135deg, rgba(212, 175, 55, 0.3), rgba(212, 175, 55, 0.1))',
-              border: '2px solid rgba(212, 175, 55, 0.5)',
-              borderRadius: '25px',
-              color: '#FFD700',
-              fontSize: '1.4rem',
-              fontWeight: 'bold',
-              cursor: players.length < 1 ? 'not-allowed' : 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '15px',
-              opacity: players.length < 1 ? 0.5 : 1,
-              boxShadow: '0 15px 35px rgba(212, 175, 55, 0.2)',
-              backdropFilter: 'blur(10px)'
+              height: '60px', 
+              fontSize: '1.25rem',
             }}
           >
-            ร่ายมนตร์เริ่มเกม! <Play size={26} fill="currentColor" />
+            เริ่มเกมเลย! <Play size={24} fill="currentColor" />
           </motion.button>
         ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '15px', color: 'rgba(212, 175, 55, 0.6)' }}>
-            <Loader2 className="spin" size={32} />
-            <span style={{ fontWeight: '600', letterSpacing: '1px' }}>รอเจ้าสำนักเปิดตำรา...</span>
+          <div className="flex-column items-center" style={{ gap: '1rem', color: 'rgba(212, 175, 55, 0.6)' }}>
+            <Loader2 className="spin" size={28} />
+            <span style={{ fontWeight: '600', letterSpacing: '1px', fontSize: '0.9rem' }}>รอเจ้าสำนักเริ่มเกม...</span>
           </div>
         )}
       </div>
