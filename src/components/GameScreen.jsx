@@ -301,7 +301,7 @@ function GameScreen({ playerName, playerId, roomCode, onFinish }) {
             <div style={{ position: 'fixed', inset: 0, zIndex: 2100, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(10px)', padding: '1rem' }}>
               <StealModal 
                 roomCode={roomCode} 
-                currentPlayerId={playerId} 
+                stealerId={playerId} 
                 onSteal={handleStealResult} 
               />
             </div>
