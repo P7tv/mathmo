@@ -189,11 +189,7 @@ function GameScreen({ playerName, playerId, roomCode, onFinish }) {
                         width: isMobile ? '90%' : 'min(1100px, 80vw)',
                         height: isMobile ? 'auto' : '350px',
                         minHeight: isMobile ? '400px' : '350px',
-                        backgroundImage: isMobile ? 'none' : `url(/assets/Train.png)`,
                         backgroundColor: isMobile ? 'rgba(0,0,0,0.4)' : 'transparent',
-                        backgroundSize: 'contain',
-                        backgroundRepeat: 'no-repeat',
-                        backgroundPosition: 'center',
                         zIndex: 1,
                         display: 'flex',
                         alignItems: 'center',
@@ -201,9 +197,25 @@ function GameScreen({ playerName, playerId, roomCode, onFinish }) {
                         borderRadius: isMobile ? '2rem' : '0',
                         backdropFilter: isMobile ? 'blur(10px)' : 'none',
                         border: isMobile ? '1px solid rgba(255,255,255,0.1)' : 'none',
-                        padding: isMobile ? '1.5rem' : '0'
+                        padding: isMobile ? '1.5rem' : '0',
+                        overflow: 'visible'
                     }}
                 >
+                    {/* Train Background Layer (Desktop Only) */}
+                    {!isMobile && (
+                      <div style={{ 
+                        position: 'absolute', 
+                        inset: 0, 
+                        backgroundImage: `url(/assets/Train.png)`,
+                        backgroundSize: 'contain',
+                        backgroundRepeat: 'no-repeat',
+                        backgroundPosition: 'center',
+                        mixBlendMode: 'multiply',
+                        zIndex: -1,
+                        pointerEvents: 'none'
+                      }} />
+                    )}
+
                     <AnimatePresence>
                       {!isMovingTrain && !isFinishingQuestion && (
                         <motion.div 
